@@ -1,0 +1,14 @@
+List of Available Properties
+
+ID    Address             Property Type  Price     Status    
+------------------------------------------------------------
+
+List of Sold Properties
+
+ID    Address             Property Type  Price     Status    
+------------------------------------------------------------
+3     345 Maple Drv.      Pent House     ₦150,000.00Sold      
+5     567 Pine Ln.        Hotel          ₦999,500.00Sold      
+6     678 Cedar Rd.       Restaurant     ₦350,000.00Sold      
+9     901 Juniper Rd.     House          ₦180,000.00Sold      
+12    543 Bank Rd.        Restaurant     ₦105,000.00Sold      

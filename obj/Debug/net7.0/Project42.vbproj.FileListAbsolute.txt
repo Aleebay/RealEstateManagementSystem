@@ -1,0 +1,14 @@
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\bin\Debug\net7.0\Project42.exe
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\bin\Debug\net7.0\Project42.deps.json
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\bin\Debug\net7.0\Project42.runtimeconfig.json
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\bin\Debug\net7.0\Project42.dll
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\bin\Debug\net7.0\Project42.pdb
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\Project42.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\Project42.AssemblyInfoInputs.cache
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\Project42.AssemblyInfo.vb
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\Project42.vbproj.CoreCompileInputs.cache
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\Project42.dll
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\refint\Project42.dll
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\Project42.pdb
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\Project42.genruntimeconfig.cache
+C:\Users\aliab\Desktop\ITD\VisualBasic\Project42\obj\Debug\net7.0\ref\Project42.dll

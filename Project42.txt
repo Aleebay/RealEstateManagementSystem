@@ -1,0 +1,251 @@
+Imports System.IO
+
+Module RealEstateManagementSystem
+    ' Define a class to represent a property
+    Class PropertyRecord
+        Public Property ID As Integer
+        Public Property Address As String
+        Public Property PropertyType As String
+        Public Property Price As Decimal
+        Public Property Status As String
+    End Class
+
+    ' Define a list to store property records
+    Dim Properties As New List(Of PropertyRecord)
+
+    ' Specify the file paths for input and output files
+    Dim InputFilePath As String = "C:\Users\aliab\Desktop\REMSInput.csv"
+    Dim OutputFilePath As String = "C:\Users\aliab\Desktop\property_report.txt"
+
+    Sub Main()
+        LoadPropertiesFromFile()
+
+        While True            
+        
+            Console.WriteLine("Real Estate Management System")
+            Console.WriteLine("1. Add Property")
+            Console.WriteLine("2. Update Property")
+            Console.WriteLine("3. Delete Property")
+            Console.WriteLine("4. Search Properties")
+            Console.WriteLine("5. Property Statistics")
+            Console.WriteLine("6. Generate Reports")
+            Console.WriteLine("7. Exit")
+            Console.Write("Enter your choice: ")
+            Dim choice As Integer = Integer.Parse(Console.ReadLine())
+
+            Select Case choice
+                Case 1
+                    AddProperties()
+                Case 2
+                    UpdateProperty()
+                Case 3
+                    DeleteProperty()
+                Case 4
+                    SearchProperties()
+                Case 5
+                    PropertyStatistics()
+                Case 6
+                    GenerateReports()
+                Case 7
+                    SavePropertiesToFile()
+                    Exit Sub
+                Case Else
+            Console.WriteLine("Invalid choice. Please try again.")
+            End Select
+
+            Console.WriteLine()
+        End While
+    End Sub
+
+    ' Load property data from the input file
+Sub LoadPropertiesFromFile()
+    Try
+        Using reader As New StreamReader(InputFilePath) ' Update here
+            While Not reader.EndOfStream
+                Dim line As String = reader.ReadLine()
+                Dim values As String() = line.Split(vbTab)
+                If values.Length = 5 Then
+                    Dim prop As New PropertyRecord()
+                    prop.ID = Integer.Parse(values(0))
+                    prop.Address = values(1)
+                    prop.PropertyType = values(2)
+                    prop.Price = Decimal.Parse(values(3))
+                    prop.Status = values(4)
+                    Properties.Add(prop)
+                End If
+            End While
+        End Using
+    Catch ex As Exception
+        Console.WriteLine("Error loading property data: " & ex.Message)
+    End Try
+End Sub
+
+
+   ' Save property data to a file
+Sub SavePropertiesToFile()
+    Try
+        Using writer As New StreamWriter(OutputFilePath) ' Update here
+            For Each prop In Properties
+                writer.WriteLine($"{prop.ID}{vbTab}{prop.Address}{vbTab}{prop.PropertyType}{vbTab}{prop.Price}{vbTab}{prop.Status}")
+            Next
+        End Using
+    Catch ex As Exception
+        Console.WriteLine("Error saving property data: " & ex.Message)
+    End Try
+End Sub
+
+    
+    ' Add properties
+    Sub AddProperties()
+        Console.WriteLine("Add Properties")
+        While True
+            Console.Write("Enter Address (or press Enter to finish): ")
+            Dim address As String = Console.ReadLine()
+            If String.IsNullOrEmpty(address) Then
+                Exit While
+            End If
+            Console.Write("Enter Property Type: ")
+            Dim propertyType As String = Console.ReadLine()
+            Console.Write("Enter Price: ")
+            Dim price As Decimal = Decimal.Parse(Console.ReadLine())
+            Console.Write("Enter Status: ")
+            Dim status As String = Console.ReadLine()
+
+            Dim newID As Integer = If(Properties.Any(), Properties.Max(Function(prop) prop.ID) + 1, 1)
+            Dim newProperty As New PropertyRecord With {
+                .ID = newID,
+                .Address = address,
+                .PropertyType = propertyType,
+                .Price = price,
+                .Status = status
+            }
+
+            Properties.Add(newProperty)
+            Console.WriteLine("Property added successfully.")
+        End While
+    End Sub
+
+    ' Update an existing property
+    Sub UpdateProperty()
+        Console.Write("Enter Property ID to update: ")
+        Dim idToUpdate As Integer = Integer.Parse(Console.ReadLine())
+        Dim propertyToUpdate As PropertyRecord = Properties.FirstOrDefault(Function(prop) prop.ID = idToUpdate)
+
+        If propertyToUpdate IsNot Nothing Then
+            Console.Write("Enter new Address: ")
+            propertyToUpdate.Address = Console.ReadLine()
+            Console.Write("Enter new Property Type: ")
+            propertyToUpdate.PropertyType = Console.ReadLine()
+            Console.Write("Enter new Price: ")
+            propertyToUpdate.Price = Decimal.Parse(Console.ReadLine())
+            Console.Write("Enter new Status: ")
+            propertyToUpdate.Status = Console.ReadLine()
+            Console.WriteLine("Property updated successfully.")
+        Else
+            Console.WriteLine("Property not found.")
+        End If
+    End Sub
+
+    ' Delete a property
+    Sub DeleteProperty()
+        Console.Write("Enter Property ID to delete: ")
+        Dim idToDelete As Integer = Integer.Parse(Console.ReadLine())
+        Dim propertyToDelete As PropertyRecord = Properties.FirstOrDefault(Function(prop) prop.ID = idToDelete)
+
+        If propertyToDelete IsNot Nothing Then
+            Properties.Remove(propertyToDelete)
+            Console.WriteLine("Property deleted successfully.")
+        Else
+            Console.WriteLine("Property not found.")
+        End If
+    End Sub
+
+    ' Search properties based on criteria
+    Sub SearchProperties()
+        Console.WriteLine("Search Properties")
+        Console.WriteLine("1. By Property Type")
+        Console.WriteLine("2. By Price Range")
+        Console.WriteLine("3. By Status")
+        Console.Write("Enter your choice: ")
+        Dim searchChoice As Integer = Integer.Parse(Console.ReadLine())
+
+        Select Case searchChoice
+            Case 1
+                Console.Write("Enter Property Type: ")
+                Dim propertyType As String = Console.ReadLine()
+                Dim results = Properties.Where(Function(prop) prop.PropertyType.Equals(propertyType, StringComparison.OrdinalIgnoreCase))
+                DisplaySearchResults(results)
+            Case 2
+                Console.Write("Enter Minimum Price: ")
+                Dim minPrice As Decimal = Decimal.Parse(Console.ReadLine())
+                Console.Write("Enter Maximum Price: ")
+                Dim maxPrice As Decimal = Decimal.Parse(Console.ReadLine())
+                Dim results = Properties.Where(Function(prop) prop.Price >= minPrice AndAlso prop.Price <= maxPrice)
+                DisplaySearchResults(results)
+            Case 3
+                Console.Write("Enter Status: ")
+                Dim status As String = Console.ReadLine()
+                Dim results = Properties.Where(Function(prop) prop.Status.Equals(status, StringComparison.OrdinalIgnoreCase))
+                DisplaySearchResults(results)
+            Case Else
+                Console.WriteLine("Invalid choice.")
+        End Select
+    End Sub
+
+    ' Display search results
+    Sub DisplaySearchResults(results As IEnumerable(Of PropertyRecord))
+        Console.WriteLine("Search Results:")
+        If results.Any() Then
+            For Each prop In results
+                Console.WriteLine($"ID: {prop.ID}, Address: {prop.Address}, Property Type: {prop.PropertyType}, Price: {prop.Price:C}, Status: {prop.Status}")
+            Next
+        Else
+            Console.WriteLine("No properties found.")
+        End If
+    End Sub
+
+    ' Calculate and display property statistics
+    Sub PropertyStatistics()
+        Console.WriteLine("Property Statistics")
+        Console.WriteLine($"Total Properties: {Properties.Count}")
+        Console.WriteLine($"Average Price: {Properties.Average(Function(prop) prop.Price):C}")
+        Dim propertyTypes = Properties.GroupBy(Function(prop) prop.PropertyType).Select(Function(group) New With {.Type = group.Key, .Count = group.Count()})
+        Console.WriteLine("Property Type Distribution:")
+        For Each type In propertyTypes
+            Console.WriteLine($"{type.Type}: {type.Count}")
+        Next
+    End Sub
+
+        ' Generate property reports and save to the output file
+    Sub GenerateReports()
+        Try
+            Using writer As New StreamWriter(OutputFilePath)
+                writer.WriteLine("List of Available Properties")
+                writer.WriteLine()
+                writer.WriteLine($"{"ID",-6}{"Address",-20}{"Property Type",-15}{"Price",-10}{"Status",-10}")
+                writer.WriteLine(New String("-", 60))
+
+                For Each prop In Properties
+                    If prop.Status.Equals("For Sale", StringComparison.OrdinalIgnoreCase) Then
+                        writer.WriteLine($"{prop.ID,-6}{prop.Address,-20}{prop.PropertyType,-15}{prop.Price,-10:C}{prop.Status,-10}")
+                    End If
+                Next
+
+                writer.WriteLine()
+                writer.WriteLine("List of Sold Properties")
+                writer.WriteLine()
+                writer.WriteLine($"{"ID",-6}{"Address",-20}{"Property Type",-15}{"Price",-10}{"Status",-10}")
+                writer.WriteLine(New String("-", 60))
+
+                For Each prop In Properties
+                    If prop.Status.Equals("Sold", StringComparison.OrdinalIgnoreCase) Then
+                        writer.WriteLine($"{prop.ID,-6}{prop.Address,-20}{prop.PropertyType,-15}{prop.Price,-10:C}{prop.Status,-10}")
+                    End If
+                Next
+            End Using
+            Console.WriteLine("Reports generated and saved to output.txt")
+        Catch ex As Exception
+            Console.WriteLine("Error generating reports: " & ex.Message)
+        End Try
+    End Sub
+End Module
